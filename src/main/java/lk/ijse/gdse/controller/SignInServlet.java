@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lk.ijse.gdse.dao.UserDAO;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -28,22 +29,20 @@ public class SignInServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        try (Connection conn = dataSource.getConnection()) {
+        try{
 
-            String sql = "SELECT user_id, role FROM users WHERE username = ? AND password = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = new UserDAO(this.dataSource).getUser(username , password);
 
             if (rs.next()) {
                 int userId = rs.getInt("user_id");
                 String role = rs.getString("role");
+                String name = rs.getString("full_name");
 
                 HttpSession session = request.getSession();
                 session.setAttribute("user_id", userId);
+                session.setAttribute("username", userId);
                 session.setAttribute("role", role);
+                session.setAttribute("fullName", name);
 
                 if ("ADMIN".equalsIgnoreCase(role)) {
                     request.getRequestDispatcher("view/AdminDashboard.jsp").forward(request, response);
@@ -55,7 +54,6 @@ public class SignInServlet extends HttpServlet {
                 }
 
             } else {
-                // Invalid login
                 response.sendRedirect("view/signIn.jsp?error=invalid_credentials");
             }
 

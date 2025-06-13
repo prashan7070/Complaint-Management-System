@@ -406,14 +406,14 @@
 </head>
 <body>
 
-<form method="post" action="logout" class="logout-btn">
+<form method="post" action="${pageContext.request.contextPath}/employee" class="logout-btn">
     <button type="submit" class="btn btn-danger btn-sm">Logout</button>
 </form>
 
 <div class="container fade-in">
     <div class="header">
         <div class="user-info">
-            Welcome, <%= session.getAttribute("username") != null ? session.getAttribute("username") : "Employee" %>
+            Welcome, <%= session.getAttribute("fullName") != null ? session.getAttribute("fullName") : "Employee" %>
         </div>
         <h1>🏛️ Municipal Complaint Management</h1>
         <p>Employee Dashboard - Submit and Track Your Complaints</p>
@@ -423,7 +423,7 @@
         <div class="section">
             <h2 class="section-title">Submit New Complaint</h2>
 
-            <form method="post" action="complaint">
+            <form method="post" action="${pageContext.request.contextPath}/employee">
                 <input type="hidden" name="action" value="add" id="actionField">
                 <input type="hidden" name="complaintId" value="" id="complaintIdField">
 

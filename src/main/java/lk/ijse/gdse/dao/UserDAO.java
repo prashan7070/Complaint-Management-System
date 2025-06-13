@@ -33,6 +33,19 @@ public class UserDAO {
     }
 
 
+    public ResultSet getUser(String username , String password) throws SQLException {
+
+        Connection connection = dataSource.getConnection();
+        String sql = "SELECT *  FROM users WHERE username = ? AND password = ?";
+        PreparedStatement stmt = connection.prepareStatement(sql);
+        stmt.setString(1, username);
+        stmt.setString(2, password);
+
+        return stmt.executeQuery();
+
+    }
+
+
 
 
 

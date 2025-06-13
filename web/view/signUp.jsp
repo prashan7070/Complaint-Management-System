@@ -84,7 +84,7 @@
         <button type="submit" class="signup-btn">Sign Up</button>
     </form>
 
-    <button class="signin-btn" onclick="window.location.href='view/signIn.jsp'">Already have an account? Sign In</button>
+    <button class="signin-btn" onclick="window.location.href='${pageContext.request.contextPath}/view/signIn.jsp'">Sign In</button>
 </div>
 </body>
 </html>

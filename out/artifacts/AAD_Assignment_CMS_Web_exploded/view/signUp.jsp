@@ -69,6 +69,7 @@
 <body>
 <div class="signup-container">
     <h2>Sign Up</h2>
+
     <form action="${pageContext.request.contextPath}/signUp" method="post">
         <input type="text" name="name" placeholder="Full Name" required />
         <input type="text" name="username" placeholder="Username" required />
@@ -83,8 +84,7 @@
         <button type="submit" class="signup-btn">Sign Up</button>
     </form>
 
-    <!-- Sign In Button similar to SignUp in previous page -->
-    <button class="signin-btn" onclick="window.location.href='view/signIn.jsp'">Already have an account? Sign In</button>
+    <button class="signin-btn" onclick="window.location.href='${pageContext.request.contextPath}/view/signIn.jsp'">Sign In</button>
 </div>
 </body>
 </html>

@@ -6,6 +6,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.ijse.gdse.dao.UserDAO;
+import lk.ijse.gdse.model.UserModel;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -35,17 +37,16 @@ public class SignUpServlet extends HttpServlet {
             return;
         }
 
+        UserModel userModel = new UserModel();
+        userModel.setName(name);
+        userModel.setUsername(username);
+        userModel.setPassword(password);
+        userModel.setRole(role);
 
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     "INSERT INTO users (full_name , username, password, role) VALUES (?, ?, ?, ?)")) {
 
-            preparedStatement.setString(1,name);
-            preparedStatement.setString(2, username);
-            preparedStatement.setString(3, password);
-            preparedStatement.setString(4, role);
+        try {
 
-            int rowsAffected = preparedStatement.executeUpdate();
+            int rowsAffected = new UserDAO(this.dataSource).saveUser(userModel);
 
             if (rowsAffected > 0) {
                 response.sendRedirect("view/signIn.jsp?success=true");

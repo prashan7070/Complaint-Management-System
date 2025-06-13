@@ -75,11 +75,11 @@
         }
     %>
 
-    <form action="SignIn" method="post">
+    <form action="${pageContext.request.contextPath}/signIn" method="post">
         <input type="text" name="username" placeholder="Username" required />
         <input type="password" name="password" placeholder="Password" required />
         <button type="submit">Sign In</button>
-        <button type="button" class="signup-btn" onclick="window.location.href='view/signUp.jsp'">Sign Up</button>
+        <button type="button" class="signup-btn" onclick="window.location.href='${pageContext.request.contextPath}/view/signUp.jsp'">Sign Up</button>
     </form>
 </div>
 </body>

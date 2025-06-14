@@ -344,7 +344,7 @@
 
         .control-form {
             display: grid;
-            grid-template-columns: 1fr 2fr 120px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
             align-items: end;
         }
@@ -432,6 +432,13 @@
             font-size: 0.8rem;
         }
 
+        .modern-input[readonly] {
+            background: linear-gradient(135deg, #ecf0f1, #f8f9fa);
+            border-color: #d5dbdb;
+            color: #7f8c8d;
+            cursor: not-allowed;
+        }
+
         .btn-update {
             background: linear-gradient(135deg, #8e44ad, #9b59b6);
             color: white;
@@ -447,6 +454,7 @@
             box-shadow: 0 3px 10px rgba(142, 68, 173, 0.3);
             position: relative;
             overflow: hidden;
+            width: 100%;
         }
 
         .btn-update::before {
@@ -468,6 +476,20 @@
 
         .btn-update:hover::before {
             left: 100%;
+        }
+
+        .form-group-wide {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 1024px) {
+            .control-form {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-group-wide {
+                grid-column: span 2;
+            }
         }
 
         @media (max-width: 768px) {
@@ -510,6 +532,10 @@
             .control-form {
                 grid-template-columns: 1fr;
                 gap: 15px;
+            }
+
+            .form-group-wide {
+                grid-column: span 1;
             }
 
             .control-section {
@@ -562,10 +588,16 @@
 
         <!-- Control Section -->
         <div class="control-section">
-            <h2 class="control-title">Complaint Management Controls</h2>
+<%--            <h2 class="control-title">⚙️ Complaint Management</h2>--%>
             <form method="post" action="${pageContext.request.contextPath}/admin" class="control-form">
                 <input type="hidden" name="complaintId" id="selectedComplaintId">
                 <input type="hidden" name="empId" id="selectedEmpId">
+
+                <div class="form-group">
+                    <label class="form-label">Complaint ID</label>
+                    <input type="text" id="displayComplaintId" class="modern-input" readonly
+                           placeholder="Select a complaint...">
+                </div>
 
                 <div class="form-group">
                     <label class="form-label">Status</label>
@@ -575,19 +607,30 @@
                             <option value="Pending">Pending</option>
                             <option value="In Progress">In Progress</option>
                             <option value="Resolved">Resolved</option>
-                            <option value="Rejected">Rejected</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group form-group-wide">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="displayTitle" class="modern-input" readonly
+                           placeholder="Complaint title will appear here...">
+                </div>
+
+                <div class="form-group form-group-wide">
+                    <label class="form-label">Description</label>
+                    <input type="text" id="displayDescription" class="modern-input" readonly
+                           placeholder="Complaint description will appear here...">
+                </div>
+
+                <div class="form-group form-group-wide">
                     <label class="form-label">Remarks</label>
                     <input type="text" name="remark" id="remarkInput" class="modern-input"
                            placeholder="Enter your remarks here...">
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn-update">
+                    <button type="submit" class="btn-update" name="action" id="updateStatus">
                         ✨ Update Status
                     </button>
                 </div>
@@ -623,12 +666,14 @@
 
                             // Sample data for demonstration - replace with actual data iteration
                             for (int i = 0; i < 3; i++) {
+                                String complaintTitle = "Road Maintenance Issue " + (i + 1);
+                                String complaintDesc = "Description of complaint " + (i + 1) + " - needs immediate attention";
                     %>
-                    <tr onclick="selectComplaint('CMP00<%= i + 1 %>', 'EMP00<%= i + 1 %>', '<%= (i == 0) ? "Pending" : (i == 1) ? "In Progress" : "Resolved" %>', '<%= (i == 2) ? "Issue resolved successfully" : "" %>')" style="cursor: pointer;">
+                    <tr onclick="selectComplaint('CMP00<%= i + 1 %>', 'EMP00<%= i + 1 %>', '<%= complaintTitle %>', '<%= complaintDesc %>', '<%= (i == 0) ? "Pending" : (i == 1) ? "In Progress" : "Resolved" %>', '<%= (i == 2) ? "Issue resolved successfully" : "" %>')" style="cursor: pointer;">
                         <td>CMP00<%= i + 1 %></td>
                         <td>EMP00<%= i + 1 %></td>
-                        <td>Sample Complaint <%= i + 1 %></td>
-                        <td>Description of complaint <%= i + 1 %></td>
+                        <td><%= complaintTitle %></td>
+                        <td><%= complaintDesc %></td>
                         <td>
                             <%-- Dynamic status class assignment --%>
                             <span class="status <%= (i == 0) ? "status-pending" : (i == 1) ? "status-in-progress" : "status-resolved" %>">
@@ -654,25 +699,18 @@
                     </tbody>
                 </table>
             </div>
-
-            <!-- Refresh Section -->
-            <div class="refresh-section">
-                <form method="get" action="${pageContext.request.contextPath}/admin">
-                    <input type="hidden" name="action" value="refresh">
-                    <button type="submit" class="btn btn-primary">
-                        🔄 Refresh Dashboard
-                    </button>
-                </form>
-            </div>
         </div>
     </div>
 </div>
 
 <script>
 
-    function selectComplaint(complaintId, empId, status, remark) {
+    function selectComplaint(complaintId, empId, title, description, status, remark) {
         document.getElementById('selectedComplaintId').value = complaintId;
         document.getElementById('selectedEmpId').value = empId;
+        document.getElementById('displayComplaintId').value = complaintId;
+        document.getElementById('displayTitle').value = title;
+        document.getElementById('displayDescription').value = description;
         document.getElementById('statusSelect').value = status || '';
         document.getElementById('remarkInput').value = remark || '';
 
@@ -689,6 +727,9 @@
     function clearForm() {
         document.getElementById('selectedComplaintId').value = '';
         document.getElementById('selectedEmpId').value = '';
+        document.getElementById('displayComplaintId').value = '';
+        document.getElementById('displayTitle').value = '';
+        document.getElementById('displayDescription').value = '';
         document.getElementById('statusSelect').value = '';
         document.getElementById('remarkInput').value = '';
 

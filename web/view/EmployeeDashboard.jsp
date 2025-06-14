@@ -455,7 +455,7 @@
 
             <form method="post" action="${pageContext.request.contextPath}/employee">
                 <input type="hidden" name="action" value="add" id="actionField">
-                <input type="hidden" name="complaintId" value="" id="complaintIdField">
+                <input type="hidden" name="complaintId" value="" id="complaintId">
 
                 <div class="form-grid">
                     <div class="form-group">
@@ -472,17 +472,17 @@
                 </div>
 
                 <div class="button-group">
-                    <button type="submit" class="btn btn-primary" id="addBtn">
+                    <button type="submit" class="btn btn-primary" id="addBtn" name="action" value="add">
                         ➕ Add Complaint
                     </button>
-                    <button type="submit" class="btn btn-success" id="updateBtn" >
+                    <button type="submit" class="btn btn-success" id="updateBtn" name="action" value="update">
                         ✏️ Update Complaint
                     </button>
                     <button type="submit" class="btn btn-danger" id="deleteBtn"
-                            onclick="return confirm('Are you sure you want to delete this complaint?')">
+                            onclick="return confirm('Are you sure you want to delete this complaint?')" name="action" value="delete">
                         🗑️ Delete Complaint
                     </button>
-                    <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                    <button type="button" class="btn btn-secondary" onclick="clearForm()" name="action" value="reset">
                         🧹 Clear Form
                     </button>
                 </div>
@@ -507,6 +507,12 @@
                     </tr>
                     </thead>
                     <tbody>
+
+
+
+
+
+
 
                     </tbody>
                 </table>

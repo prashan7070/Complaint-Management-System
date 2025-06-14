@@ -47,7 +47,7 @@ public class SignInServlet extends HttpServlet {
                 if ("ADMIN".equalsIgnoreCase(role)) {
                     request.getRequestDispatcher("view/AdminDashboard.jsp").forward(request, response);
                 } else if ("EMPLOYEE".equalsIgnoreCase(role)) {
-                    request.getRequestDispatcher("view/EmployeeDashboard.jsp").forward(request, response);
+                    request.getRequestDispatcher("employee").forward(request, response);
 
                 } else {
                     response.sendRedirect("view/signIn.jsp?error=invalid_role");

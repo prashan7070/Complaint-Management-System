@@ -403,6 +403,35 @@
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
+
+
+    <%
+        String successMsg = request.getParameter("success");
+        String errorMsg = request.getParameter("error");
+    %>
+
+    <script>
+        <% if ("true".equals(successMsg)) { %>
+        Swal.fire({
+            toast: true,
+            position: "top-end",
+            icon: "success",
+            title: "Saved successfully!",
+            showConfirmButton: false,
+            timer: 1500
+        });
+        <% } else if ("true".equals(errorMsg)) { %>
+        Swal.fire({
+            toast: true,
+            position: "top-end",
+            icon: "error",
+            title: "Failed to save",
+            showConfirmButton: false,
+            timer: 1500
+        });
+        <% } %>
+    </script>
+
 </head>
 <body>
 
@@ -412,6 +441,7 @@
 
 <div class="container fade-in">
     <div class="header">
+
         <div class="user-info">
             Welcome, <%= session.getAttribute("fullName") != null ? session.getAttribute("fullName") : "Employee" %>
         </div>
@@ -482,13 +512,13 @@
                 </table>
             </div>
 
-
         </div>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    // Form validation and UI interactions (limited to validation as per requirements)
     function clearForm() {
         document.getElementById('title').value = '';
         document.getElementById('description').value = '';
@@ -538,6 +568,8 @@
         this.style.height = 'auto';
         this.style.height = this.scrollHeight + 'px';
     });
+
+
 </script>
 </body>
 </html>

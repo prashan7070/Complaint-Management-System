@@ -5,6 +5,7 @@ import lk.ijse.gdse.model.EmployeeModel;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +37,31 @@ public class EmployeeDAO {
     }
 
 
-    public List<EmployeeModel> getAllComplains(int id){
+    public List<EmployeeModel> getAllComplains(int id) throws SQLException {
 
         List<EmployeeModel> employeeList = new ArrayList<>();
+        Connection connection = dataSource.getConnection();
+        PreparedStatement pstm = connection.prepareStatement("SELECT * FROM complaints WHERE user_id = ?");
+        pstm.setInt(1,id);
+        ResultSet rs = pstm.executeQuery();
 
+        while (rs.next()){
 
+            EmployeeModel employeeModel = new EmployeeModel();
+            employeeModel.setComplaintId(rs.getInt("complaint_id"));
+            employeeModel.setEmpId(rs.getInt("user_id"));
+            employeeModel.setTitle(rs.getString("title"));
+            employeeModel.setDescription(rs.getString("description"));
+            employeeModel.setStatus(rs.getString("status"));
+            employeeModel.setCreatedDate(rs.getString("created_at"));
+            employeeModel.setUpdatedDate(rs.getString("updated_at"));
+            employeeModel.setRemarks(rs.getString("remark"));
+
+            employeeList.add(employeeModel);
+
+        }
+
+        return employeeList;
 
 
     }

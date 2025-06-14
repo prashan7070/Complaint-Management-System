@@ -21,7 +21,7 @@ import java.sql.SQLException;
 
 public class SignInServlet extends HttpServlet {
 
-    @Resource(name = "jdbc/pool")
+    @Resource(name = "java:comp/env/jdbc/pool")
     private DataSource dataSource;
 
     @Override
@@ -44,17 +44,24 @@ public class SignInServlet extends HttpServlet {
                 session.setAttribute("role", role);
                 session.setAttribute("fullName", name);
 
-                if ("ADMIN".equalsIgnoreCase(role)) {
-                    request.getRequestDispatcher("view/AdminDashboard.jsp").forward(request, response);
-                } else if ("EMPLOYEE".equalsIgnoreCase(role)) {
-                    request.getRequestDispatcher("employee").forward(request, response);
+                if ("ADMIN".equals(role)) {
 
-                } else {
-                    response.sendRedirect("view/signIn.jsp?error=invalid_role");
+                    request.getRequestDispatcher("view/AdminDashboard.jsp").forward(request, response);
+
+                } else  {
+
+//                    request.getRequestDispatcher("view/EmployeeDashboard.jsp").forward(request, response);
+//                    request.getRequestDispatcher("employee").forward(request, response);
+
+
+                    response.sendRedirect(request.getContextPath() + "/employee");
+
+
                 }
 
             } else {
-                response.sendRedirect("view/signIn.jsp?error=invalid_credentials");
+//                response.sendRedirect("view/signIn.jsp?error=invalid_credentials");
+                request.getRequestDispatcher("view/signIn.jsp?error=true").forward(request, response);
             }
 
         } catch (SQLException e) {

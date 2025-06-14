@@ -4,7 +4,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.*;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.ijse.gdse.dao.EmployeeDAO;
 import lk.ijse.gdse.model.EmployeeModel;
@@ -15,11 +15,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("/employee")
-
 public class EmployeeServlet extends HttpServlet {
 
 
-    @Resource(name = "jdbc/pool")
+    @Resource(name = "java:comp/env/jdbc/pool")
     private DataSource dataSource;
 
     @Override
@@ -38,8 +37,17 @@ public class EmployeeServlet extends HttpServlet {
         try {
 
             EmployeeDAO employeeDAO = new EmployeeDAO(dataSource);
-            String userId = (String) request.getSession().getAttribute("user_Id");
-            int id = Integer.parseInt(userId);
+//            String userId = (String) request.getSession().getAttribute("user_id");
+//            int id = Integer.parseInt(userId);
+
+            int id = 0;
+
+            Object userObj = request.getSession().getAttribute("user_id");
+            if (userObj != null) {
+                String userId = userObj.toString(); // avoid ClassCastException
+                id = Integer.parseInt(userId);
+            }
+
 
             if ("add".equals(action)) {
 
@@ -51,9 +59,11 @@ public class EmployeeServlet extends HttpServlet {
                 int rowsAffected = employeeDAO.saveComplain(employeeModel);
 
                 if (rowsAffected > 0) {
-                    response.sendRedirect("view/EmployeeDashboard.jsp?success=true");
+                    request.setAttribute("message", "Complaint saved successfully");
+
                 } else {
-                    response.sendRedirect("view/EmployeeDashboard.jsp?error=true");
+                    request.setAttribute("message", "Complaint save unsuccessful");
+
                 }
 
 
@@ -69,8 +79,10 @@ public class EmployeeServlet extends HttpServlet {
                 int rowsAffected  = employeeDAO.updateComplain(employeeModel);
                  if (rowsAffected > 0) {
                      request.setAttribute("message", "Complaint updated successfully");
+
                  } else {
                      request.setAttribute("message", "Complaint update unsuccessful!");
+
                  }
 
             } else if ("delete".equals(action)) {
@@ -80,16 +92,17 @@ public class EmployeeServlet extends HttpServlet {
 
                 if (rowsAffected > 0) {
                     request.setAttribute("message", "Complaint deleted successfully");
+
                 } else {
                     request.setAttribute("message", "Complaint update unsuccessful!");
+
                 }
 
             }
 
+            response.sendRedirect("employee");
+//            response.sendRedirect(request.getContextPath() + "/employee");
 
-            List<EmployeeModel> complainList = employeeDAO.getAllComplains(id);
-            request.setAttribute("userComplainList" , complainList);
-            request.getRequestDispatcher("view/EmployeeDashboard.jsp").forward(request,response);
 
 
         } catch (SQLException e) {
@@ -97,4 +110,35 @@ public class EmployeeServlet extends HttpServlet {
         }
 
     }
+
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        System.out.println("This is get method");
+
+        EmployeeDAO employeeDAO = new EmployeeDAO(dataSource);
+        int id = 0;
+
+        Object userObj = request.getSession().getAttribute("user_id");
+        if (userObj != null) {
+            String userId = userObj.toString(); // avoid ClassCastException
+            id = Integer.parseInt(userId);
+        }
+
+        try {
+
+            List<EmployeeModel> complainList = employeeDAO.getAllComplains(id);
+            request.setAttribute("complainList" , complainList);
+            request.getRequestDispatcher("view/EmployeeDashboard.jsp").forward(request, response);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+
+
 }

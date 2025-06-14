@@ -20,7 +20,7 @@ import java.sql.SQLException;
 
 public class SignUpServlet extends HttpServlet {
 
-    @Resource(name = "jdbc/pool")
+    @Resource(name = "java:comp/env/jdbc/pool")
     private DataSource dataSource;
 
     @Override

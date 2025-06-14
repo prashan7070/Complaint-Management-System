@@ -1,3 +1,5 @@
+<%@ page import="lk.ijse.gdse.model.EmployeeModel" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -454,7 +456,7 @@
             <h2 class="section-title">Submit New Complaint</h2>
 
             <form method="post" action="${pageContext.request.contextPath}/employee">
-                <input type="hidden" name="action" value="add" id="actionField">
+<%--                <input type="hidden" name="action" value="add" id="actionField">--%>
                 <input type="hidden" name="complaintId" value="" id="complaintId">
 
                 <div class="form-grid">
@@ -497,22 +499,61 @@
                 <table>
                     <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Complain ID</th>
+                        <th>Employee ID</th>
                         <th>Title</th>
                         <th>Description</th>
                         <th>Status</th>
-                        <th>Created</th>
-                        <th>Updated</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Remark</th>
 
                     </tr>
                     </thead>
+
                     <tbody>
 
 
 
+                            <%
+                                List<EmployeeModel> complaintList = (List<EmployeeModel>) request.getAttribute("complainList");
+                                if (complaintList != null && !complaintList.isEmpty()) {
+                                    for (EmployeeModel complaint : complaintList) {
+                            %>
+
+                            <tr onclick="selectComplaint('<%= complaint.getComplaintId() %>', '<%= complaint.getTitle() %>', '<%= complaint.getDescription() %>')">
+                                <td><%= complaint.getComplaintId() %></td>
+                                <td><%= complaint.getEmpId() %></td>
+                                <td><%= complaint.getTitle() %></td>
+                                <td><%= complaint.getDescription() %></td>
+<%--                                <td><%= complaint.getStatus() != null ? complaint.getStatus() : "Pending" %></td>--%>
+
+                                <td>
+                                    <span class="status <%=
+                                        (complaint.getStatus() != null) ?
+                                            (complaint.getStatus().equalsIgnoreCase("Pending") ? "status-pending" :
+                                             complaint.getStatus().equalsIgnoreCase("In Progress") ? "status-in-progress" :
+                                             complaint.getStatus().equalsIgnoreCase("Resolved") ? "status-resolved" :
+                                             "status-pending") :
+                                            "status-pending" %>">
+                                        <%= complaint.getStatus() != null ? complaint.getStatus() : "Pending" %>
+                                    </span>
+                                </td>
 
 
 
+                                <td><%= complaint.getCreatedDate() != null ? complaint.getCreatedDate() : "--" %></td>
+                                <td><%= complaint.getUpdatedDate() != null ? complaint.getUpdatedDate() : "--" %></td>
+                                <td><%= complaint.getRemarks() != null ? complaint.getRemarks() : "No Remarks" %></td>
+                            </tr>
+                            <%
+                                }
+                            } else {
+                            %>
+                            <tr><td colspan="7">No complaints found.</td></tr>
+                            <%
+                                }
+                            %>
 
                     </tbody>
                 </table>
@@ -524,56 +565,75 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+
 <script>
+
+    // window.onload = function() {
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     if (urlParams.get('saveSuccess') === 'true') {
+    //         Swal.fire({
+    //             toast: true,
+    //             position: "top-end",
+    //             icon: "success",
+    //             title: "Complaint saved successfully!",
+    //             showConfirmButton: false,
+    //             timer: 1500
+    //         });
+    //     } else if (urlParams.get('updateSuccess') === 'true') {
+    //         Swal.fire({
+    //             toast: true,
+    //             position: "top-end",
+    //             icon: "success",
+    //             title: "Complaint updated successfully!",
+    //             showConfirmButton: false,
+    //             timer: 1500
+    //         });
+    //     } else if (urlParams.get('deleteSuccess') === 'true') {
+    //         Swal.fire({
+    //             toast: true,
+    //             position: "top-end",
+    //             icon: "success",
+    //             title: "Complaint deleted successfully!",
+    //             showConfirmButton: false,
+    //             timer: 1500
+    //         });
+    //     } else if (urlParams.get('error') === 'true') {
+    //         Swal.fire({
+    //             toast: true,
+    //             position: "top-end",
+    //             icon: "error",
+    //             title: "Operation failed",
+    //             showConfirmButton: false,
+    //             timer: 1500
+    //         });
+    //     }
+    // };
+
+
+
+    function selectComplaint(id, title, description) {
+        document.getElementById('complaintId').value = id;
+        document.getElementById('title').value = title;
+        document.getElementById('description').value = description;
+        document.getElementById('updateBtn').disabled = false;
+        document.getElementById('deleteBtn').disabled=false;
+
+        document.querySelector('.section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+
     function clearForm() {
         document.getElementById('title').value = '';
         document.getElementById('description').value = '';
-        document.getElementById('complaintIdField').value = '';
+        document.getElementById('complaintId').value = '';
         document.getElementById('actionField').value = 'add';
         document.getElementById('addBtn').style.display = 'inline-block';
         document.getElementById('updateBtn').style.display = 'none';
         document.getElementById('deleteBtn').style.display = 'none';
     }
 
-    function editComplaint(id, title, description) {
-        document.getElementById('complaintIdField').value = id;
-        document.getElementById('title').value = title;
-        document.getElementById('description').value = description;
-        document.getElementById('actionField').value = 'update';
-        document.getElementById('addBtn').style.display = 'none';
-        document.getElementById('updateBtn').style.display = 'inline-block';
-        document.getElementById('deleteBtn').style.display = 'inline-block';
 
-        document.querySelector('.section').scrollIntoView({ behavior: 'smooth' });
-    }
-
-    document.querySelector('form').addEventListener('submit', function(e) {
-        const title = document.getElementById('title').value.trim();
-        const description = document.getElementById('description').value.trim();
-
-        if (!title || !description) {
-            e.preventDefault();
-            alert('Please fill in all required fields.');
-            return false;
-        }
-
-        if (title.length < 5) {
-            e.preventDefault();
-            alert('Complaint title must be at least 5 characters long.');
-            return false;
-        }
-
-        if (description.length < 20) {
-            e.preventDefault();
-            alert('Complaint description must be at least 20 characters long.');
-            return false;
-        }
-    });
-
-    document.getElementById('description').addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = this.scrollHeight + 'px';
-    });
 
 
 </script>

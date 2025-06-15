@@ -2,8 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="lk.ijse.gdse.model.EmployeeModel" %>
-<%-- Import your model classes here --%>
-<%-- import com.yourpackage.model.EmployeeModel; --%>
+
 
 <!DOCTYPE html>
 <html>
@@ -591,7 +590,6 @@
 
         <!-- Control Section -->
         <div class="control-section">
-            <h2 class="control-title">⚙️ Complaint Management</h2>
             <form method="post" action="${pageContext.request.contextPath}/admin" class="control-form">
 
 

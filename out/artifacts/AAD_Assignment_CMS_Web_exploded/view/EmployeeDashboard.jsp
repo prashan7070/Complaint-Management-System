@@ -437,7 +437,7 @@
 </head>
 <body>
 
-<form method="post" action="${pageContext.request.contextPath}/employee" class="logout-btn">
+<form method="post" action="${pageContext.request.contextPath}/logout" class="logout-btn">
     <button type="submit" class="btn btn-danger btn-sm">Logout</button>
 </form>
 

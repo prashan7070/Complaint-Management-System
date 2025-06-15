@@ -73,6 +73,15 @@
     </div>
     <%
         }
+
+        String logoutMsg = request.getParameter("logout");
+        if ("true".equals(logoutMsg)) {
+    %>
+    <div style="background-color: #d1ecf1; color: #0c5460; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+        You have logged out successfully.
+    </div>
+    <%
+        }
     %>
 
     <form action="${pageContext.request.contextPath}/signIn" method="post">

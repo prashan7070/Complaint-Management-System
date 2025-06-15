@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%-- Import your model classes here --%>
-<%-- import com.yourpackage.model.EmployeeModel; --%>
+<%@ page import="lk.ijse.gdse.model.EmployeeModel" %>
+
 
 <!DOCTYPE html>
 <html>
@@ -221,11 +221,6 @@
             border: 1px solid #c3e6cb;
         }
 
-        .status-rejected {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
 
         .btn {
             padding: 8px 16px;
@@ -482,6 +477,7 @@
             grid-column: span 2;
         }
 
+
         @media (max-width: 1024px) {
             .control-form {
                 grid-template-columns: repeat(2, 1fr);
@@ -573,39 +569,43 @@
         <!-- Statistics Section -->
         <div class="stats-section">
             <div class="stat-card">
-                <h3 class="stat-total"><%= request.getAttribute("totalComplaints") != null ? request.getAttribute("totalComplaints") : "0" %></h3>
+                <h3 class="stat-total">
+                    <%= request.getAttribute("totalComplaints") != null ? request.getAttribute("totalComplaints") : "0" %>
+                </h3>
                 <p>Total Complaints</p>
             </div>
             <div class="stat-card">
-                <h3 class="stat-pending"><%= request.getAttribute("pendingComplaints") != null ? request.getAttribute("pendingComplaints") : "0" %></h3>
+                <h3 class="stat-pending">
+                    <%= request.getAttribute("pendingComplaints") != null ? request.getAttribute("pendingComplaints") : "0" %>
+                </h3>
                 <p>Pending Complaints</p>
             </div>
             <div class="stat-card">
-                <h3 class="stat-resolved"><%= request.getAttribute("resolvedComplaints") != null ? request.getAttribute("resolvedComplaints") : "0" %></h3>
+                <h3 class="stat-resolved">
+                    <%= request.getAttribute("resolvedComplaints") != null ? request.getAttribute("resolvedComplaints") : "0" %>
+                </h3>
                 <p>Resolved Complaints</p>
             </div>
         </div>
 
         <!-- Control Section -->
         <div class="control-section">
-<%--            <h2 class="control-title">⚙️ Complaint Management</h2>--%>
             <form method="post" action="${pageContext.request.contextPath}/admin" class="control-form">
-                <input type="hidden" name="complaintId" id="selectedComplaintId">
-                <input type="hidden" name="empId" id="selectedEmpId">
+
 
                 <div class="form-group">
                     <label class="form-label">Complaint ID</label>
-                    <input type="text" id="displayComplaintId" class="modern-input" readonly
+                    <input type="text" name="complaintId" id="complaintId" class="modern-input" readonly
                            placeholder="Select a complaint...">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Status</label>
                     <div class="modern-select">
-                        <select name="status" id="statusSelect" required>
-                            <option value="">Select Status</option>
+                        <select name="status" id="status" required>
+<%--                            <option value="">Select Status</option>--%>
                             <option value="Pending">Pending</option>
-                            <option value="In Progress">In Progress</option>
+                            <option value="In_Progress">In Progress</option>
                             <option value="Resolved">Resolved</option>
                         </select>
                     </div>
@@ -613,25 +613,28 @@
 
                 <div class="form-group form-group-wide">
                     <label class="form-label">Title</label>
-                    <input type="text" id="displayTitle" class="modern-input" readonly
+                    <input type="text" id="title" class="modern-input" readonly
                            placeholder="Complaint title will appear here...">
                 </div>
 
                 <div class="form-group form-group-wide">
                     <label class="form-label">Description</label>
-                    <input type="text" id="displayDescription" class="modern-input" readonly
+                    <input type="text" id="description" class="modern-input" readonly
                            placeholder="Complaint description will appear here...">
                 </div>
 
                 <div class="form-group form-group-wide">
                     <label class="form-label">Remarks</label>
-                    <input type="text" name="remark" id="remarkInput" class="modern-input"
+                    <input type="text" name="remarks" id="remarks" class="modern-input"
                            placeholder="Enter your remarks here...">
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn-update" name="action" id="updateStatus">
+                    <button type="submit" class="btn-update" name="action" value="update" id="updateBtn">
                         ✨ Update Status
+                    </button>
+                    <button type="submit" class="btn-delete" name="action" value="delete" id="deleteBtn">
+                        🗑️ Delete Status
                     </button>
                 </div>
             </form>
@@ -656,46 +659,46 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <%
-                        // Get complaint list from request attribute
-                        List<?> complainList = (List<?>) request.getAttribute("complainList");
 
-                        if (complainList != null && !complainList.isEmpty()) {
-                            // In a real application, cast to your actual model class
-                            // for (EmployeeModel complaint : (List<EmployeeModel>) complainList) {
+                            <%
+                                List<EmployeeModel> complaintList = (List<EmployeeModel>) request.getAttribute("complainList");
+                                if (complaintList != null && !complaintList.isEmpty()) {
+                                    for (EmployeeModel complaint : complaintList) {
+                            %>
 
-                            // Sample data for demonstration - replace with actual data iteration
-                            for (int i = 0; i < 3; i++) {
-                                String complaintTitle = "Road Maintenance Issue " + (i + 1);
-                                String complaintDesc = "Description of complaint " + (i + 1) + " - needs immediate attention";
-                    %>
-                    <tr onclick="selectComplaint('CMP00<%= i + 1 %>', 'EMP00<%= i + 1 %>', '<%= complaintTitle %>', '<%= complaintDesc %>', '<%= (i == 0) ? "Pending" : (i == 1) ? "In Progress" : "Resolved" %>', '<%= (i == 2) ? "Issue resolved successfully" : "" %>')" style="cursor: pointer;">
-                        <td>CMP00<%= i + 1 %></td>
-                        <td>EMP00<%= i + 1 %></td>
-                        <td><%= complaintTitle %></td>
-                        <td><%= complaintDesc %></td>
-                        <td>
-                            <%-- Dynamic status class assignment --%>
-                            <span class="status <%= (i == 0) ? "status-pending" : (i == 1) ? "status-in-progress" : "status-resolved" %>">
-                                        <%= (i == 0) ? "Pending" : (i == 1) ? "In Progress" : "Resolved" %>
+                            <tr onclick="selectComplaint('<%= complaint.getComplaintId() %>', '<%= complaint.getTitle() %>', '<%= complaint.getDescription() %>','<%= complaint.getStatus() %>', '<%= complaint.getRemarks() %>')">
+                                <td><%= complaint.getComplaintId() %></td>
+                                <td><%= complaint.getEmpId() %></td>
+                                <td><%= complaint.getTitle() %></td>
+                                <td><%= complaint.getDescription() %></td>
+                                <%--                                <td><%= complaint.getStatus() != null ? complaint.getStatus() : "Pending" %></td>--%>
+
+                                <td>
+                                    <span class="status <%=
+                                        (complaint.getStatus() != null) ?
+                                            (complaint.getStatus().equalsIgnoreCase("PENDING") ? "status-pending" :
+                                             complaint.getStatus().equalsIgnoreCase("IN_PROGRESS") ? "status-in-progress" :
+                                             complaint.getStatus().equalsIgnoreCase("RESOLVED") ? "status-resolved" :
+                                             "status-pending") :
+                                            "status-pending" %>">
+                                        <%= complaint.getStatus() != null ? complaint.getStatus() : "Pending" %>
                                     </span>
-                        </td>
-                        <td>2025-06-<%= 12 + i %></td>
-                        <td>2025-06-<%= 12 + i %></td>
-                        <td><%= (i == 2) ? "Issue resolved successfully" : "" %></td>
-                    </tr>
-                    <%
-                        }
-                    } else {
-                    %>
-                    <tr>
-                        <td colspan="8" class="no-data">
-                            No complaints found in the system.
-                        </td>
-                    </tr>
-                    <%
-                        }
-                    %>
+                                </td>
+
+
+                                <td><%= complaint.getCreatedDate() != null ? complaint.getCreatedDate() : "--" %></td>
+                                <td><%= complaint.getUpdatedDate() != null ? complaint.getUpdatedDate() : "--" %></td>
+                                <td><%= complaint.getRemarks() != null ? complaint.getRemarks() : "No Remarks" %></td>
+                            </tr>
+                            <%
+                                }
+                            } else {
+                            %>
+                            <tr><td colspan="7">No complaints found.</td></tr>
+                            <%
+                                }
+                            %>
+
                     </tbody>
                 </table>
             </div>
@@ -705,14 +708,19 @@
 
 <script>
 
-    function selectComplaint(complaintId, empId, title, description, status, remark) {
-        document.getElementById('selectedComplaintId').value = complaintId;
-        document.getElementById('selectedEmpId').value = empId;
-        document.getElementById('displayComplaintId').value = complaintId;
-        document.getElementById('displayTitle').value = title;
-        document.getElementById('displayDescription').value = description;
-        document.getElementById('statusSelect').value = status || '';
-        document.getElementById('remarkInput').value = remark || '';
+    function selectComplaint(complaintId, title, description, status, remarks){
+
+        console.log('hi this is select complaint');
+        console.log(status);
+
+        document.getElementById('complaintId').value = complaintId;
+        document.getElementById('title').value = title;
+        document.getElementById('description').value = description;
+        const statusSelect = document.getElementById('status');
+        statusSelect.options[statusSelect.selectedIndex].text = status
+            ? status.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+            : 'Pending';
+        document.getElementById('remarks').value = remarks || '';
 
         const tableRows = document.querySelectorAll('tbody tr');
         tableRows.forEach(row => {
@@ -722,16 +730,17 @@
 
         event.currentTarget.style.backgroundColor = '#e3f2fd';
         event.currentTarget.style.borderLeft = '4px solid #3498db';
+
+        document.querySelector('.control-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
     }
 
     function clearForm() {
-        document.getElementById('selectedComplaintId').value = '';
-        document.getElementById('selectedEmpId').value = '';
-        document.getElementById('displayComplaintId').value = '';
-        document.getElementById('displayTitle').value = '';
-        document.getElementById('displayDescription').value = '';
-        document.getElementById('statusSelect').value = '';
-        document.getElementById('remarkInput').value = '';
+        document.getElementById('complaintId').value = '';
+        document.getElementById('title').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('status').value = '';
+        document.getElementById('remarks').value = '';
 
         const tableRows = document.querySelectorAll('tbody tr');
         tableRows.forEach(row => {
@@ -740,83 +749,6 @@
         });
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const controlForm = document.querySelector('.control-form');
-
-        if (controlForm) {
-            controlForm.addEventListener('submit', function(e) {
-                const complaintId = document.getElementById('selectedComplaintId').value;
-                const statusSelect = document.getElementById('statusSelect');
-                const remarkInput = document.getElementById('remarkInput');
-
-                if (!complaintId) {
-                    e.preventDefault();
-                    alert('Please select a complaint from the table first.');
-                    return false;
-                }
-
-                if (!statusSelect.value) {
-                    e.preventDefault();
-                    alert('Please select a status before updating.');
-                    statusSelect.focus();
-                    return false;
-                }
-
-                if (statusSelect.value === 'Resolved' && !remarkInput.value.trim()) {
-                    const confirmResolve = confirm('You are marking this complaint as resolved without a remark. Continue?');
-                    if (!confirmResolve) {
-                        e.preventDefault();
-                        remarkInput.focus();
-                        return false;
-                    }
-                }
-
-                // Show loading state
-                const submitBtn = controlForm.querySelector('.btn-update');
-                submitBtn.innerHTML = '⏳ Updating...';
-                submitBtn.disabled = true;
-            });
-        }
-    });
-
-    // Enhanced table row interactions
-    document.addEventListener('DOMContentLoaded', function() {
-        const tableRows = document.querySelectorAll('tbody tr');
-
-        tableRows.forEach(row => {
-            row.addEventListener('mouseenter', function() {
-                if (!this.style.backgroundColor || this.style.backgroundColor === '') {
-                    this.style.backgroundColor = '#f8f9fa';
-                }
-            });
-
-            row.addEventListener('mouseleave', function() {
-                if (this.style.backgroundColor === 'rgb(248, 249, 250)') {
-                    this.style.backgroundColor = '';
-                }
-            });
-        });
-    });
-
-    // Add clear selection button functionality
-    function addClearButton() {
-        const controlSection = document.querySelector('.control-section');
-        if (controlSection) {
-            const clearBtn = document.createElement('button');
-            clearBtn.type = 'button';
-            clearBtn.className = 'btn btn-sm';
-            clearBtn.innerHTML = '🗑️ Clear Selection';
-            clearBtn.onclick = clearForm;
-            clearBtn.style.marginTop = '10px';
-            clearBtn.style.background = '#95a5a6';
-            clearBtn.style.color = 'white';
-
-            controlSection.appendChild(clearBtn);
-        }
-    }
-
-    // Initialize clear button
-    document.addEventListener('DOMContentLoaded', addClearButton);
 </script>
 </body>
 </html>

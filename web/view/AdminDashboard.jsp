@@ -717,6 +717,7 @@
         document.getElementById('title').value = title;
         document.getElementById('description').value = description;
         const statusSelect = document.getElementById('status');
+
         statusSelect.options[statusSelect.selectedIndex].text = status
             ? status.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
             : 'Pending';

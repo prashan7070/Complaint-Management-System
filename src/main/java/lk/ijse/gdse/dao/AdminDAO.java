@@ -73,6 +73,36 @@ public class AdminDAO {
 
     }
 
+    public int[] getCountData() throws SQLException {
+
+        Connection connection = dataSource.getConnection();
+
+        PreparedStatement pstm = connection.prepareStatement("SELECT status, COUNT(*) AS count\n" +
+                "FROM complaints\n" +
+                "GROUP BY status;\n");
+
+        ResultSet rs = pstm.executeQuery();
+
+        int pending = 0, in_progress = 0 , resolved = 0;
+
+        while (rs.next()){
+
+            String status = rs.getString("status");
+            int count = rs.getInt("count");
+
+            switch (status){
+                case "PENDING" -> pending = count;
+                case "IN_PROGRESS" -> in_progress = count;
+                case "RESOLVED" -> resolved = count;
+            }
+
+        }
+
+        int total = pending + in_progress + resolved;
+
+        return new int[]{total , pending , in_progress ,resolved};
+
+    }
 
 
 

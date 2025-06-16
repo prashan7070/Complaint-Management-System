@@ -581,6 +581,12 @@
                 <p>Pending Complaints</p>
             </div>
             <div class="stat-card">
+                <h3 class="stat-pending">
+                    <%= request.getAttribute("inProgressComplaints") != null ? request.getAttribute("inProgressComplaints") : "0" %>
+                </h3>
+                <p>In Progress Complaints</p>
+            </div>
+            <div class="stat-card">
                 <h3 class="stat-resolved">
                     <%= request.getAttribute("resolvedComplaints") != null ? request.getAttribute("resolvedComplaints") : "0" %>
                 </h3>

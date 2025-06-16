@@ -101,7 +101,14 @@ public class AdminServlet extends HttpServlet {
         try {
 
             List<EmployeeModel> complainList = adminDAO.getAllComplains();
+            int[] countData = adminDAO.getCountData();
             req.setAttribute("complainList" , complainList);
+
+            req.setAttribute("totalComplaints" , countData[0]);
+            req.setAttribute("pendingComplaints" , countData[1]);
+            req.setAttribute("inProgressComplaints" , countData[2]);
+            req.setAttribute("resolvedComplaints" , countData[3]);
+
             req.getRequestDispatcher("view/AdminDashboard.jsp").forward(req, resp);
 
         } catch (SQLException e) {

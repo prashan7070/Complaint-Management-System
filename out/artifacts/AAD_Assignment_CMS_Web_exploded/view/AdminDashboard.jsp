@@ -257,12 +257,6 @@
         }
 
 
-
-
-
-
-
-
         .btn-delete {
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
@@ -302,13 +296,6 @@
         .btn-delete:hover::before {
             left: 100%;
         }
-
-
-
-
-
-
-
 
 
         .btn-success {
@@ -533,6 +520,202 @@
         }
 
 
+        .search-section {
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e3e8ee;
+        }
+
+        .search-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        .search-title::before {
+            content: '🔍';
+            font-size: 1.1rem;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: end;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 150px;
+        }
+
+        .search-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #34495e;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .search-form .modern-select {
+            position: relative;
+        }
+
+        .search-form .modern-select select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e3e8ee;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            appearance: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            min-width: 180px;
+        }
+
+        .search-form .modern-select select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .search-form .modern-select::after {
+            content: '▼';
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+            font-size: 0.7rem;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-form .modern-select:hover::after {
+            color: #3498db;
+        }
+
+        .btn-search {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+            position: relative;
+            overflow: hidden;
+            min-width: 120px;
+        }
+
+        .btn-search::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-search:hover {
+            background: linear-gradient(135deg, #2980b9, #1f618d);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-search:hover::before {
+            left: 100%;
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            box-shadow: 0 3px 10px rgba(149, 165, 166, 0.3);
+            position: relative;
+            overflow: hidden;
+            min-width: 120px;
+        }
+
+        .btn-clear::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-clear:hover {
+            background: linear-gradient(135deg, #7f8c8d, #6c7b7b);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(149, 165, 166, 0.4);
+        }
+
+        .btn-clear:hover::before {
+            left: 100%;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-group {
+                min-width: 100%;
+            }
+
+            .search-form .modern-select select,
+            .btn-search,
+            .btn-clear {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-section {
+                padding: 15px;
+            }
+
+            .search-title {
+                font-size: 1.1rem;
+            }
+        }
+
+
         @media (max-width: 1024px) {
             .control-form {
                 grid-template-columns: repeat(2, 1fr);
@@ -700,6 +883,36 @@
                 </div>
             </form>
         </div>
+
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <h2 class="search-title">Search & Filter Complaints</h2>
+            <form method="get" action="${pageContext.request.contextPath}/admin" class="search-form">
+                <div class="search-group">
+                    <label class="search-label">Filter by Status</label>
+                    <div class="modern-select">
+                        <select name="searchStatus" id="searchStatus">
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="In_Progress">In Progress</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="search-group">
+                    <button type="submit" class="btn-search" name="action" value="search">
+                        🔍 Search
+                    </button>
+                </div>
+                <div class="search-group">
+                    <button type="submit" class="btn-clear" name="action" value="clear">
+                        ↻ Clear Filter
+                    </button>
+                </div>
+            </form>
+        </div>
+
 
         <!-- Complaints Management Section -->
         <div class="section">

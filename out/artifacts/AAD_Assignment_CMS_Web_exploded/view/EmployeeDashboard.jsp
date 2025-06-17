@@ -6,6 +6,7 @@
 <head>
     <title>Employee Dashboard - Complaint Management</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         * {
             margin: 0;
@@ -350,6 +351,12 @@
             z-index: 1000;
         }
 
+        .small-toast {
+            font-size: 0.8rem;
+            padding: 8px 14px;
+            width: 260px;
+        }
+
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -407,32 +414,7 @@
     </style>
 
 
-    <%
-        String successMsg = request.getParameter("success");
-        String errorMsg = request.getParameter("error");
-    %>
 
-    <script>
-        <% if ("true".equals(successMsg)) { %>
-        Swal.fire({
-            toast: true,
-            position: "top-end",
-            icon: "success",
-            title: "Saved successfully!",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        <% } else if ("true".equals(errorMsg)) { %>
-        Swal.fire({
-            toast: true,
-            position: "top-end",
-            icon: "error",
-            title: "Failed to save",
-            showConfirmButton: false,
-            timer: 1500
-        });
-        <% } %>
-    </script>
 
 </head>
 <body>
@@ -563,54 +545,44 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+<%
+
+    String alertType = (String) request.getSession().getAttribute("alertType");
+    String alertMsg = (String) request.getSession().getAttribute("alertMsg");
+
+    if (alertType!=null || alertMsg!=null){
+        session.removeAttribute("alertType");
+        session.removeAttribute("alertType");
+
+%>
+
+    <script>
+
+        Swal.fire({
+            toast: true,
+            position: "top-end",
+            icon: '<%=alertType%>',
+            title: '<%=alertMsg%>',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'small-toast'
+            }
+        });
+
+
+    </script>
+
+
+<%
+    }
+%>
 
 
 <script>
-
-    // window.onload = function() {
-    //     const urlParams = new URLSearchParams(window.location.search);
-    //     if (urlParams.get('saveSuccess') === 'true') {
-    //         Swal.fire({
-    //             toast: true,
-    //             position: "top-end",
-    //             icon: "success",
-    //             title: "Complaint saved successfully!",
-    //             showConfirmButton: false,
-    //             timer: 1500
-    //         });
-    //     } else if (urlParams.get('updateSuccess') === 'true') {
-    //         Swal.fire({
-    //             toast: true,
-    //             position: "top-end",
-    //             icon: "success",
-    //             title: "Complaint updated successfully!",
-    //             showConfirmButton: false,
-    //             timer: 1500
-    //         });
-    //     } else if (urlParams.get('deleteSuccess') === 'true') {
-    //         Swal.fire({
-    //             toast: true,
-    //             position: "top-end",
-    //             icon: "success",
-    //             title: "Complaint deleted successfully!",
-    //             showConfirmButton: false,
-    //             timer: 1500
-    //         });
-    //     } else if (urlParams.get('error') === 'true') {
-    //         Swal.fire({
-    //             toast: true,
-    //             position: "top-end",
-    //             icon: "error",
-    //             title: "Operation failed",
-    //             showConfirmButton: false,
-    //             timer: 1500
-    //         });
-    //     }
-    // };
-
-
 
     function selectComplaint(id, title, description ,status) {
         document.getElementById('complaintId').value = id;

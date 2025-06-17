@@ -36,6 +36,8 @@ public class EmployeeServlet extends HttpServlet {
 
         try {
 
+
+
             EmployeeDAO employeeDAO = new EmployeeDAO(dataSource);
 //            String userId = (String) request.getSession().getAttribute("user_id");
 //            int id = Integer.parseInt(userId);
@@ -48,6 +50,8 @@ public class EmployeeServlet extends HttpServlet {
                 id = Integer.parseInt(userId);
             }
 
+            HttpSession session = request.getSession();
+
 
             if ("add".equals(action)) {
 
@@ -59,10 +63,12 @@ public class EmployeeServlet extends HttpServlet {
                 int rowsAffected = employeeDAO.saveComplain(employeeModel);
 
                 if (rowsAffected > 0) {
-                    request.setAttribute("message", "Complaint saved successfully");
+                    session.setAttribute("alertType", "success");
+                    session.setAttribute("alertMsg", "Complaint saved successfully");
 
                 } else {
-                    request.setAttribute("message", "Complaint save unsuccessful");
+                    session.setAttribute("alertType", "error");
+                    session.setAttribute("alertMsg", "Complaint saved unsuccessful");
 
                 }
 
@@ -78,10 +84,12 @@ public class EmployeeServlet extends HttpServlet {
 
                 int rowsAffected  = employeeDAO.updateComplain(employeeModel);
                  if (rowsAffected > 0) {
-                     request.setAttribute("message", "Complaint updated successfully");
+                     session.setAttribute("alertType", "success");
+                     session.setAttribute("alertMsg", "Complaint updated successfully");
 
                  } else {
-                     request.setAttribute("message", "Complaint update unsuccessful!");
+                     session.setAttribute("alertType", "error");
+                     session.setAttribute("alertMsg", "Complaint update unsuccessful");
 
                  }
 
@@ -91,10 +99,12 @@ public class EmployeeServlet extends HttpServlet {
                 int rowsAffected = employeeDAO.deleteComplain(complaintId);
 
                 if (rowsAffected > 0) {
-                    request.setAttribute("message", "Complaint deleted successfully");
+                    session.setAttribute("alertType", "success");
+                    session.setAttribute("alertMsg", "Complaint deleted successfully");
 
                 } else {
-                    request.setAttribute("message", "Complaint update unsuccessful!");
+                    session.setAttribute("alertType", "error");
+                    session.setAttribute("alertMsg", "Complaint delete unsuccessful");
 
                 }
 

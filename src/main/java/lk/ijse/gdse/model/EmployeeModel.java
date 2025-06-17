@@ -27,8 +27,6 @@ public class EmployeeModel {
     }
 
 
-
-
     public int getComplaintId() {
         return complaintId;
     }

@@ -256,6 +256,61 @@
             font-size: 0.8rem;
         }
 
+
+
+
+
+
+
+
+        .btn-delete {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            margin-top: 10px; /* Add space between update and delete buttons */
+        }
+
+        .btn-delete::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-delete:hover::before {
+            left: 100%;
+        }
+
+
+
+
+
+
+
+
+
         .btn-success {
             background: linear-gradient(135deg, #27ae60, #229954);
             color: white;

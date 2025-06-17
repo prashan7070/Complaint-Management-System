@@ -103,7 +103,6 @@ public class AdminServlet extends HttpServlet {
             List<EmployeeModel> complainList = adminDAO.getAllComplains();
             int[] countData = adminDAO.getCountData();
             req.setAttribute("complainList" , complainList);
-
             req.setAttribute("totalComplaints" , countData[0]);
             req.setAttribute("pendingComplaints" , countData[1]);
             req.setAttribute("inProgressComplaints" , countData[2]);

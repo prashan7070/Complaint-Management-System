@@ -484,7 +484,7 @@
                             onclick="return confirm('Are you sure you want to delete this complaint?')" name="action" value="delete">
                         🗑️ Delete Complaint
                     </button>
-                    <button type="button" class="btn btn-secondary" onclick="clearForm()" name="action" value="reset">
+                    <button type="button" class="btn btn-secondary" id="resetBtn" onclick="clearForm()" name="action" value="reset">
                         🧹 Clear Form
                     </button>
                 </div>
@@ -521,7 +521,7 @@
                                     for (EmployeeModel complaint : complaintList) {
                             %>
 
-                            <tr onclick="selectComplaint('<%= complaint.getComplaintId() %>', '<%= complaint.getTitle() %>', '<%= complaint.getDescription() %>')">
+                            <tr onclick="selectComplaint('<%= complaint.getComplaintId() %>', '<%= complaint.getTitle() %>', '<%= complaint.getDescription() %>' , '<%= complaint.getStatus() %>')">
                                 <td><%= complaint.getComplaintId() %></td>
                                 <td><%= complaint.getEmpId() %></td>
                                 <td><%= complaint.getTitle() %></td>
@@ -612,12 +612,28 @@
 
 
 
-    function selectComplaint(id, title, description) {
+    function selectComplaint(id, title, description ,status) {
         document.getElementById('complaintId').value = id;
         document.getElementById('title').value = title;
         document.getElementById('description').value = description;
-        document.getElementById('updateBtn').disabled = false;
-        document.getElementById('deleteBtn').disabled=false;
+
+        console.log(status);
+
+        document.getElementById('addBtn').disabled = true;
+
+        const updateBtn = document.getElementById('updateBtn');
+        const deleteBtn = document.getElementById('deleteBtn');
+
+        updateBtn.style.display = 'inline-block';
+        deleteBtn.style.display = 'inline-block';
+
+        if (status === 'RESOLVED') {
+            updateBtn.disabled = true;
+            deleteBtn.disabled = true;
+        } else {
+            updateBtn.disabled = false;
+            deleteBtn.disabled = false;
+        }
 
         document.querySelector('.section').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -628,9 +644,16 @@
         document.getElementById('description').value = '';
         document.getElementById('complaintId').value = '';
         document.getElementById('actionField').value = 'add';
-        document.getElementById('addBtn').style.display = 'inline-block';
-        document.getElementById('updateBtn').style.display = 'none';
-        document.getElementById('deleteBtn').style.display = 'none';
+        document.getElementById('addBtn').disabled = false;
+
+        const updateBtn = document.getElementById('updateBtn');
+        const deleteBtn = document.getElementById('deleteBtn');
+
+        updateBtn.style.display = 'none';
+        deleteBtn.style.display = 'none';
+        updateBtn.disabled = false;
+        deleteBtn.disabled = false;
+
     }
 
 

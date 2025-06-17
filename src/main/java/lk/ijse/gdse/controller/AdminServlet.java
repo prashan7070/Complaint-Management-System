@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 @WebServlet("/admin")
 
@@ -84,7 +85,6 @@ public class AdminServlet extends HttpServlet {
             //            response.sendRedirect(request.getContextPath() + "/employee");
 
 
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -97,12 +97,32 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         AdminDAO adminDAO = new AdminDAO(dataSource);
+        String action = req.getParameter("action");
+        String status = req.getParameter("searchStatus");
 
         try {
 
-            List<EmployeeModel> complainList = adminDAO.getAllComplains();
+            if ("search".equals(action)){
+
+                System.out.println("this is search method");
+
+                List<EmployeeModel> complainListBySearch = adminDAO.getAllComplainsByStatus(status);
+                req.setAttribute("selectedStatus" , status);
+                req.setAttribute("complainList" , complainListBySearch);
+
+
+            }else {
+
+                System.out.println("this is not the search method");
+
+                List<EmployeeModel> complainList = adminDAO.getAllComplains();
+                req.setAttribute("complainList" , complainList);
+            }
+
+
+
             int[] countData = adminDAO.getCountData();
-            req.setAttribute("complainList" , complainList);
+
             req.setAttribute("totalComplaints" , countData[0]);
             req.setAttribute("pendingComplaints" , countData[1]);
             req.setAttribute("inProgressComplaints" , countData[2]);

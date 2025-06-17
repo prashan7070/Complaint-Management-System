@@ -273,7 +273,7 @@
             position: relative;
             overflow: hidden;
             width: 100%;
-            margin-top: 10px; /* Add space between update and delete buttons */
+            margin-top: 10px;
         }
 
         .btn-delete::before {
@@ -892,11 +892,17 @@
                 <div class="search-group">
                     <label class="search-label">Filter by Status</label>
                     <div class="modern-select">
+
+                        <%
+                            String selectedStatus = (String) request.getAttribute("selectedStatus");
+
+                        %>
+
                         <select name="searchStatus" id="searchStatus">
-                            <option value="">All Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="In_Progress">In Progress</option>
-                            <option value="Resolved">Resolved</option>
+<%--                            <option value="">All Status</option>--%>
+                            <option value="Pending" <%= "Pending".equals(selectedStatus) ? "selected" : "" %>>Pending</option>
+                            <option value="In_Progress" <%= "In_Progress".equals(selectedStatus) ? "selected" : ""  %>>In Progress</option>
+                            <option value="Resolved" <%= "Resolved".equals(selectedStatus) ? "selected" : "" %>>Resolved</option>
                         </select>
                     </div>
                 </div>
@@ -985,9 +991,10 @@
 
 <script>
 
+
+
     function selectComplaint(complaintId, title, description, status, remarks){
 
-        console.log('hi this is select complaint');
         console.log(status);
 
         document.getElementById('complaintId').value = complaintId;

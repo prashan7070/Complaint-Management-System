@@ -46,22 +46,16 @@ public class SignInServlet extends HttpServlet {
 
                 if ("ADMIN".equals(role)) {
 
-//                    request.getRequestDispatcher("view/AdminDashboard.jsp").forward(request, response);
                     response.sendRedirect(request.getContextPath() + "/admin");
 
                 } else  {
 
-//                    request.getRequestDispatcher("view/EmployeeDashboard.jsp").forward(request, response);
-//                    request.getRequestDispatcher("employee").forward(request, response);
-
-
                     response.sendRedirect(request.getContextPath() + "/employee");
-
 
                 }
 
             } else {
-//                response.sendRedirect("view/signIn.jsp?error=invalid_credentials");
+
                 request.getRequestDispatcher("view/signIn.jsp?error=true").forward(request, response);
             }
 

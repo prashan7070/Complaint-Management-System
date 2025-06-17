@@ -892,11 +892,18 @@
                 <div class="search-group">
                     <label class="search-label">Filter by Status</label>
                     <div class="modern-select">
+
+                        <%
+                            String selectedStatus = (String) request.getAttribute("selectedStatus");
+                            System.out.println(selectedStatus);
+
+                        %>
+
                         <select name="searchStatus" id="searchStatus">
-                            <option value="">All Status</option>
-                            <option value="Pending">Pending</option>
-                            <option value="In_Progress">In Progress</option>
-                            <option value="Resolved">Resolved</option>
+<%--                            <option value="">All Status</option>--%>
+                            <option value="Pending" <%= "Pending".equals(selectedStatus) ? "selected" : "" %>>Pending</option>
+                            <option value="In_Progress" <%= "In_Progress".equals(selectedStatus) ? "selected" : ""  %>>In Progress</option>
+                            <option value="Resolved" <%= "Resolved".equals(selectedStatus) ? "selected" : "" %>>Resolved</option>
                         </select>
                     </div>
                 </div>
@@ -912,6 +919,9 @@
                 </div>
             </form>
         </div>
+
+
+
 
 
         <!-- Complaints Management Section -->
@@ -968,7 +978,7 @@
                                 }
                             } else {
                             %>
-                            <tr><td colspan="7">No complaints found.</td></tr>
+                            <tr><td colspan="8">No complaints found.</td></tr>
                             <%
                                 }
                             %>
@@ -982,19 +992,22 @@
 
 <script>
 
+
+
     function selectComplaint(complaintId, title, description, status, remarks){
 
-        console.log('hi this is select complaint');
         console.log(status);
 
         document.getElementById('complaintId').value = complaintId;
         document.getElementById('title').value = title;
         document.getElementById('description').value = description;
+
         const statusSelect = document.getElementById('status');
 
         statusSelect.options[statusSelect.selectedIndex].text = status
             ? status.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
             : 'Pending';
+
         document.getElementById('remarks').value = remarks || '';
 
         const tableRows = document.querySelectorAll('tbody tr');

@@ -438,7 +438,6 @@
             <h2 class="section-title">Submit New Complaint</h2>
 
             <form method="post" action="${pageContext.request.contextPath}/employee">
-<%--                <input type="hidden" name="action" value="add" id="actionField">--%>
                 <input type="hidden" name="complaintId" value="" id="complaintId">
 
                 <div class="form-grid">
@@ -508,8 +507,6 @@
                                 <td><%= complaint.getEmpId() %></td>
                                 <td><%= complaint.getTitle() %></td>
                                 <td><%= complaint.getDescription() %></td>
-<%--                                <td><%= complaint.getStatus() != null ? complaint.getStatus() : "Pending" %></td>--%>
-
                                 <td>
                                     <span class="status <%=
                                         (complaint.getStatus() != null) ?
@@ -521,9 +518,6 @@
                                         <%= complaint.getStatus() != null ? complaint.getStatus() : "Pending" %>
                                     </span>
                                 </td>
-
-
-
                                 <td><%= complaint.getCreatedDate() != null ? complaint.getCreatedDate() : "--" %></td>
                                 <td><%= complaint.getUpdatedDate() != null ? complaint.getUpdatedDate() : "--" %></td>
                                 <td><%= complaint.getRemarks() != null ? complaint.getRemarks() : "No Remarks" %></td>

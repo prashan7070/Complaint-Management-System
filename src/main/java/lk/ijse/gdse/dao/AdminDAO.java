@@ -105,5 +105,33 @@ public class AdminDAO {
     }
 
 
+    public List<EmployeeModel> getAllComplainsByStatus(String status) throws SQLException {
+
+        Connection connection = dataSource.getConnection();
+        PreparedStatement pstm = connection.prepareStatement("SELECT * FROM complaints WHERE status= ?");
+        pstm.setString(1,status);
+        ResultSet rst = pstm.executeQuery();
+        List<EmployeeModel> compalainsList = new ArrayList<>();
+
+        while (rst.next()){
+
+            EmployeeModel employeeModel = new EmployeeModel();
+            employeeModel.setComplaintId(rst.getInt("complaint_id"));
+            employeeModel.setEmpId(rst.getInt("user_id"));
+            employeeModel.setTitle(rst.getString("title"));
+            employeeModel.setDescription(rst.getString("description"));
+            employeeModel.setStatus(rst.getString("status"));
+            employeeModel.setCreatedDate(rst.getString("created_at"));
+            employeeModel.setUpdatedDate(rst.getString("updated_at"));
+            employeeModel.setRemarks(rst.getString("remark"));
+
+            compalainsList.add(employeeModel);
+
+        }
+
+        return compalainsList;
+
+    }
+
 
 }
